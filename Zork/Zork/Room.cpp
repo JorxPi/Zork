@@ -1,5 +1,7 @@
 #include <iostream>
 #include "Room.h"
+#include "Exit.h"
+
 
 Room::Room(const std::string& name, const std::string& description)
     : Entity(EntityType::ROOM, name, description) {
@@ -12,11 +14,19 @@ void Room::Update() {
     if (!contents.empty()) {
         std::cout << "You see:\n";
         for (Entity* e : contents) {
-            std::cout << " - " << e->GetName() << ": " << e->GetDescription() << "\n";
+            switch (e->GetType()) {
+            case EntityType::ITEM:
+                std::cout << " - An item: " << e->GetName() << /*" — " << e->GetDescription() <<*/ "\n";
+                break;
 
-            //Contents inside contents also shown, althought later we will not use this as the player will have comands to check inside contents
-            if (!e->GetContents().empty()) {
-                e->Update();  
+            case EntityType::EXIT: {
+                Exit* exit = static_cast<Exit*>(e);
+                std::cout << " - An exit to the " << exit->GetDirection() << " which leads to a " << exit->GetDestination()->GetName() << "\n";
+                break;
+            }
+            default:
+
+                break;
             }
         }
     }
