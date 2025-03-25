@@ -4,12 +4,19 @@
 #include <iostream>
 #include "Entity.h"
 #include "Room.h"
+#include "Item.h"
 
 int main() {
     Room hall("Hall", "A large, echoing stone hall with torches on the walls.");
 
+    Item box("Wooden Box", "An old wooden box with a rusty latch.");
+    Item key("Small Key", "A tiny brass key, probably for a chest.");
+
     Room closet("Closet", "A small dusty closet with a locked chest.");
     hall.Add(&closet);
+
+    box.Add(&key);      
+    hall.Add(&box);
 
     hall.Update();
 

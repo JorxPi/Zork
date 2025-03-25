@@ -13,6 +13,11 @@ void Room::Update() {
         std::cout << "You see:\n";
         for (Entity* e : contents) {
             std::cout << " - " << e->GetName() << ": " << e->GetDescription() << "\n";
+
+            //Contents inside contents also shown, althought later we will not use this as the player will have comands to check inside contents
+            if (!e->GetContents().empty()) {
+                e->Update();  
+            }
         }
     }
 }
