@@ -24,6 +24,10 @@ void Room::Update() {
                 std::cout << " - An exit to the " << exit->GetDirection() << " which leads to a " << exit->GetDestination()->GetName() << "\n";
                 break;
             }
+
+            case EntityType::CREATURE:
+                e->Update();
+                break;
             default:
 
                 break;

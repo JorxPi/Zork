@@ -6,21 +6,33 @@
 #include "Room.h"
 #include "Item.h"
 #include "Exit.h"
+#include "Creature.h"
+#include "Player.h"
 
 int main() {
     Room hall("Hall", "A large, echoing stone hall with torches on the walls.");
+
+    Creature npc("Old Man", "He looks wise and carries a walking stick.", &hall);
 
     Item box("Wooden Box", "An old wooden box with a rusty latch.");
 
     Room garden("Garden", "A peaceful garden with trimmed hedges, blooming flowers, and a stone fountain gently trickling water in the center.");
 
     Exit toGarden("south", &hall, &garden);
+    Exit toHall("north", & garden, &hall);
   
     hall.Add(&box);
-
     hall.Add(&toGarden);
+    hall.Add(&npc);
+    garden.Add(&toHall);
+
+    Player player("You", "Just an adventurer trying to explore.", &hall);
 
     hall.Update();
+
+    while (true) {
+        player.Update(); 
+    }
 
     return 0;
 }
