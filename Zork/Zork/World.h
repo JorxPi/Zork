@@ -15,6 +15,7 @@ public:
 
     void Start();
     void UnlockHiddenGrove();
+    void UnlockCloset();
 
 private:
     std::list<Entity*> entities;
@@ -24,6 +25,10 @@ private:
     Room* stone_wall = nullptr;
     Exit* toGrove = nullptr;
     Exit* toWall2 = nullptr;
+
+    Room* bedroom = nullptr;
+    Room* closet = nullptr;
+    Exit* toCloset = nullptr;
 
     void CreateWorld();
 };

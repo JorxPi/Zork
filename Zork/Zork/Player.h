@@ -20,6 +20,7 @@ private:
     void Take(const std::string& item_name);
     void Drop(const std::string& item_name);
     void Throw(const std::string& item_name);
+    void Open(const std::string& target);
 
     static const int MAX_ITEMS = 3;
     std::list<Item*> inventory;

@@ -27,22 +27,28 @@ void World::Start() {
 }
 
 void World::UnlockHiddenGrove() {
-    if (toGrove && toWall2 && hidden_grove) {
-        stone_wall->Add(toGrove);
-        hidden_grove->Add(toWall2);
+    stone_wall->Add(toGrove);
+    hidden_grove->Add(toWall2);
 
-        stone_wall->SetDescription("The remains of a mossy stone wall lie scattered on the ground. A path now leads west into the hidden grove.");
+    stone_wall->SetDescription("The remains of a mossy stone wall lie scattered on the ground. A path now leads west into the hidden grove.");
 
-        std::cout << "You can now go west.\n";
-    }
+    std::cout << "You can now go west.\n";
+}
+
+void World::UnlockCloset() {
+    bedroom->Add(toCloset);
+
+    bedroom->SetDescription("A modest bedroom with a wooden bed, a candlelit nightstand, and an massive open closet door leading north.");
+
+    std::cout << "You unlocked the closet. You can now go north.\n";
 }
 
 void World::CreateWorld() {
     // Rooms
     Room* hall = new Room("Hall", "A large, echoing stone hall with torches on the walls.");
     Room* garden = new Room("Garden", "A peaceful garden with trimmed hedges, blooming flowers, and a stone fountain gently trickling water in the center.");
-    Room* bedroom = new Room("Bedroom", "A modest bedroom with a wooden bed, a candlelit nightstand, and a thick rug covering part of the stone floor.");
-    Room* closet = new Room("Closet", "A cramped, dusty closet filled with hanging cloaks and the faint scent of old cedar. Something feels... off.");
+    bedroom = new Room("Bedroom", "A modest bedroom with a wooden bed, a candlelit nightstand, and a massive locked closet.");
+    closet = new Room("Closet", "A cramped, dusty closet filled with hanging cloaks and the faint scent of old cedar. Something feels... off.");
     Room* magical_forest = new Room("Magical Forest", "An ethereal forest with glowing trees, soft purple mist, and creatures watching from the shadows.");
     Room* greenhouse = new Room("Greenhouse", "A humid glasshouse filled with exotic plants, tangled vines, and the buzzing of tiny insects.");
     stone_wall = new Room("Stone Wall", "A moss-covered stone wall blocks your way. It looks old and unstable — maybe it could fall.");
@@ -63,7 +69,7 @@ void World::CreateWorld() {
     Exit* toHall = new Exit("north", garden, hall);
     Exit* toBedroom = new Exit("east", hall, bedroom);
     Exit* toHall2 = new Exit("west", bedroom, hall);
-    Exit* toCloset = new Exit("north", bedroom, closet);
+    toCloset = new Exit("north", bedroom, closet);
     Exit* toBedroom2 = new Exit("south", closet, bedroom);
     Exit* toMagic = new Exit("north", closet, magical_forest);
     Exit* toCloset2 = new Exit("south", magical_forest, closet);
@@ -86,7 +92,7 @@ void World::CreateWorld() {
     garden->Add(toGreenhouse);
     garden->Add(toWall);
     bedroom->Add(toHall2);
-    bedroom->Add(toCloset);
+    //bedroom->Add(toCloset);
     closet->Add(toBedroom2);
     closet->Add(toMagic);
     magical_forest->Add(toCloset2);

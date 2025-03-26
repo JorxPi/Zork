@@ -48,6 +48,12 @@ void Player::ProcessCommand(const std::string& command) {
         std::getline(iss, item);
         Throw(item);
     }
+    else if (action == "open") {
+        std::string target;
+        iss >> std::ws;
+        std::getline(iss, target);
+        Open(target);
+    }
     else {
         std::cout << "I don't understand that command.\n";
     }
@@ -155,4 +161,28 @@ void Player::Throw(const std::string& item_name) {
     }
 
     std::cout << "You don't have that item.\n";
+}
+
+void Player::Open(const std::string& target) {
+    if (!current_room) return;
+
+    if (CompareIgnoreCase(target, "closet") &&
+        CompareIgnoreCase(current_room->GetName(), "Bedroom")) {
+
+        for (Item* item : inventory) {
+            if (CompareIgnoreCase(item->GetName(), "Small Key")) {
+                inventory.remove(item);
+                delete item;
+
+                std::cout << "You use the small key to unlock the closet door.\n";
+                world->UnlockCloset();
+                return;
+            }
+        }
+
+        std::cout << "You need a key to open the closet.\n";
+        return;
+    }
+
+    std::cout << "You can't open that.\n";
 }
