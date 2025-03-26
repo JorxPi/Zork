@@ -37,6 +37,7 @@ void World::CreateWorld() {
     // Items
     Item* box = new Item("Wooden Box", "An old wooden box with a rusty latch.");
     Item* brick = new Item("Brick", "A solid, weathered brick. It's probably not very useful, but you never know.");
+    Item* small_key = new Item("Small Key", "A tiny key with delicate engravings. It looks like it could open something important.");
 
     // Exits
     Exit* toGarden = new Exit("south", hall, garden);
@@ -48,6 +49,7 @@ void World::CreateWorld() {
     hall->Add(toGarden);
     garden->Add(brick);
     garden->Add(toHall);
+    box->Add(small_key);
 
     // Player
     player = new Player("You", "Just an adventurer trying to explore.", hall);

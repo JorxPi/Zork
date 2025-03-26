@@ -71,13 +71,40 @@ void Player::Take(const std::string& item_name) {
         return;
     }
 
+    //Take from room
     for (Entity* e : current_room->GetContents()) {
         if (e->GetType() == EntityType::ITEM && CompareIgnoreCase(e->GetName(), item_name)) {
             Item* item = static_cast<Item*>(e);
             inventory.push_back(item);
             current_room->Remove(item);
             std::cout << "You picked up the " << item_name << ".\n";
+
+            if (!item->GetContents().empty()) {
+                item->Update();
+            }
             return;
+        }
+    }
+
+    //Take from item in inventory
+    for (Item* container : inventory) {
+        for (Entity* e : container->GetContents()) {
+            if (e->GetType() == EntityType::ITEM && CompareIgnoreCase(e->GetName(), item_name)) {
+                Item* inner = static_cast<Item*>(e);
+                if (inventory.size() >= MAX_ITEMS) {
+                    std::cout << "You can't carry more than " << MAX_ITEMS << " items.\n";
+                    return;
+                }
+
+                container->Remove(inner);
+                inventory.push_back(inner);
+                std::cout << "You take the " << item_name << " from inside the " << container->GetName() << ".\n";
+
+                if (!inner->GetContents().empty()) {
+                    inner->Update();
+                }
+                return;
+            }
         }
     }
 

@@ -6,12 +6,14 @@ Item::Item(const std::string& name, const std::string& description)
 }
 
 void Item::Update() {
-    std::cout << "Item: " << GetName() << " - " << GetDescription() << "\n";
-
     if (!contents.empty()) {
-        std::cout << "Contains:\n";
+        std::cout << GetName() <<" contains a ";
         for (Entity* e : contents) {
+            std::cout  << e->GetName() << " inside it." << "\n";
             std::cout << " - " << e->GetName() << ": " << e->GetDescription() << "\n";
         }
+    }
+    else {
+        std::cout << GetName() << " has nothing insite it.";
     }
 }
