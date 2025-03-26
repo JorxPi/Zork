@@ -26,6 +26,17 @@ void World::Start() {
     }
 }
 
+void World::UnlockHiddenGrove() {
+    if (toGrove && toWall2 && hidden_grove) {
+        stone_wall->Add(toGrove);
+        hidden_grove->Add(toWall2);
+
+        stone_wall->SetDescription("The remains of a mossy stone wall lie scattered on the ground. A path now leads west into the hidden grove.");
+
+        std::cout << "You can now go west.\n";
+    }
+}
+
 void World::CreateWorld() {
     // Rooms
     Room* hall = new Room("Hall", "A large, echoing stone hall with torches on the walls.");
@@ -34,8 +45,8 @@ void World::CreateWorld() {
     Room* closet = new Room("Closet", "A cramped, dusty closet filled with hanging cloaks and the faint scent of old cedar. Something feels... off.");
     Room* magical_forest = new Room("Magical Forest", "An ethereal forest with glowing trees, soft purple mist, and creatures watching from the shadows.");
     Room* greenhouse = new Room("Greenhouse", "A humid glasshouse filled with exotic plants, tangled vines, and the buzzing of tiny insects.");
-    Room* stone_wall = new Room("Stone Wall", "A moss-covered stone wall blocks your way. It looks old and unstable — maybe it could fall.");
-    Room* hidden_grove = new Room("Hidden Grove", "A quiet, untouched grove hidden behind the fallen wall. The air feels different here.");
+    stone_wall = new Room("Stone Wall", "A moss-covered stone wall blocks your way. It looks old and unstable — maybe it could fall.");
+    hidden_grove = new Room("Hidden Grove", "A quiet, untouched grove hidden behind the fallen wall. The air feels different here.");
 
     // NPC
     Creature* npc = new Creature("Old Man", "He looks wise and carries a walking stick.", hall);
@@ -60,6 +71,8 @@ void World::CreateWorld() {
     Exit* toGarden2 = new Exit("west", greenhouse, garden);
     Exit* toWall = new Exit("west", garden, stone_wall);
     Exit* toGarden3 = new Exit("east", stone_wall, garden);
+    toGrove = new Exit("west", stone_wall, hidden_grove);
+    toWall2 = new Exit("east", hidden_grove, stone_wall);
 
     // Add contents to rooms
     hall->Add(npc);
@@ -82,7 +95,7 @@ void World::CreateWorld() {
     box->Add(small_key);
 
     // Player
-    player = new Player("You", "Just an adventurer trying to explore.", hall);
+    player = new Player("You", "Just an adventurer trying to explore.", hall, this);
 
     // Track all entities
     entities.push_back(hall);
@@ -101,6 +114,8 @@ void World::CreateWorld() {
     entities.push_back(toGreenhouse);
     entities.push_back(toGarden2);
     entities.push_back(toWall);
+    entities.push_back(toGrove);
+    entities.push_back(toWall2);
     entities.push_back(toGarden3);
     entities.push_back(npc);
     entities.push_back(box);

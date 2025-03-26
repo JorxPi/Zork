@@ -23,6 +23,8 @@ public:
     const std::string& GetName() const;
     const std::string& GetDescription() const;
 
+    void SetDescription(const std::string& new_description);
+
     void Add(Entity* entity);
     void Remove(Entity* entity);
     const std::list<Entity*>& GetContents() const;

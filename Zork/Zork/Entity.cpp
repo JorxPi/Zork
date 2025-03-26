@@ -21,6 +21,10 @@ const std::string& Entity::GetDescription() const {
     return description;
 }
 
+void Entity::SetDescription(const std::string& new_description) {
+    description = new_description;
+}
+
 void Entity::Add(Entity* entity) {
     contents.push_back(entity);
 }

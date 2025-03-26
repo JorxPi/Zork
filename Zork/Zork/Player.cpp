@@ -1,13 +1,14 @@
 #include <iostream>
 #include <sstream>
 #include "Player.h"
+#include "World.h"
 #include "Room.h"
 #include "Exit.h"
 #include "Item.h"
 #include "Utils.h"
 
-Player::Player(const std::string& name, const std::string& description, Room* starting_room)
-    : Creature(name, description, starting_room) {
+Player::Player(const std::string& name, const std::string& description, Room* starting_room, World* world)
+    : Creature(name, description, starting_room), world(world) {
     type = EntityType::PLAYER;
 }
 
@@ -40,6 +41,12 @@ void Player::ProcessCommand(const std::string& command) {
         iss >> std::ws;
         std::getline(iss, item);
         Drop(item);
+    }
+    else if (action == "throw") {
+        std::string item;
+        iss >> std::ws;
+        std::getline(iss, item);
+        Throw(item);
     }
     else {
         std::cout << "I don't understand that command.\n";
@@ -122,4 +129,30 @@ void Player::Drop(const std::string& item_name) {
     }
 
     std::cout << "You're not carrying an item called '" << item_name << "'.\n";
+}
+
+void Player::Throw(const std::string& item_name) {
+    if (!current_room) return;
+
+    for (Item* item : inventory) {
+        if (CompareIgnoreCase(item->GetName(), item_name)) {
+            if (CompareIgnoreCase(item_name, "Brick") &&
+                CompareIgnoreCase(current_room->GetName(), "Stone Wall")) {
+
+                inventory.remove(item);
+                delete item;
+
+                std::cout << "You hurl the brick at the moss-covered wall...\n";
+                std::cout << "With a heavy crash, the wall collapses, revealing a hidden path!\n";
+
+                world->UnlockHiddenGrove();
+                return;
+            }
+
+            std::cout << "Throwing that won't do anything useful here.\n";
+            return;
+        }
+    }
+
+    std::cout << "You don't have that item.\n";
 }
