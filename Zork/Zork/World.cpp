@@ -36,15 +36,17 @@ void World::CreateWorld() {
 
     // Items
     Item* box = new Item("Wooden Box", "An old wooden box with a rusty latch.");
+    Item* brick = new Item("Brick", "A solid, weathered brick. It's probably not very useful, but you never know.");
 
     // Exits
     Exit* toGarden = new Exit("south", hall, garden);
     Exit* toHall = new Exit("north", garden, hall);
 
     // Add contents to rooms
+    hall->Add(npc);
     hall->Add(box);
     hall->Add(toGarden);
-    hall->Add(npc);
+    garden->Add(brick);
     garden->Add(toHall);
 
     // Player
@@ -55,7 +57,8 @@ void World::CreateWorld() {
     entities.push_back(garden);
     entities.push_back(toGarden);
     entities.push_back(toHall);
-    entities.push_back(box);
     entities.push_back(npc);
+    entities.push_back(box);
+    entities.push_back(brick);
     entities.push_back(player);
 }
