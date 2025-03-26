@@ -30,9 +30,17 @@ void World::CreateWorld() {
     // Rooms
     Room* hall = new Room("Hall", "A large, echoing stone hall with torches on the walls.");
     Room* garden = new Room("Garden", "A peaceful garden with trimmed hedges, blooming flowers, and a stone fountain gently trickling water in the center.");
+    Room* bedroom = new Room("Bedroom", "A modest bedroom with a wooden bed, a candlelit nightstand, and a thick rug covering part of the stone floor.");
+    Room* closet = new Room("Closet", "A cramped, dusty closet filled with hanging cloaks and the faint scent of old cedar. Something feels... off.");
+    Room* magical_forest = new Room("Magical Forest", "An ethereal forest with glowing trees, soft purple mist, and creatures watching from the shadows.");
+    Room* greenhouse = new Room("Greenhouse", "A humid glasshouse filled with exotic plants, tangled vines, and the buzzing of tiny insects.");
+    Room* stone_wall = new Room("Stone Wall", "A moss-covered stone wall blocks your way. It looks old and unstable — maybe it could fall.");
+    Room* hidden_grove = new Room("Hidden Grove", "A quiet, untouched grove hidden behind the fallen wall. The air feels different here.");
 
     // NPC
     Creature* npc = new Creature("Old Man", "He looks wise and carries a walking stick.", hall);
+    Creature* unicorn = new Creature("Unicorn", "A serene white unicorn with silver eyes. It nods at you in greeting.", magical_forest);
+    Creature* goblin = new Creature("Goblin", "A mischievous green goblin crouches in the shadows, grinning with sharp teeth and clutching a satchel full of who-knows-what.", magical_forest);
 
     // Items
     Item* box = new Item("Wooden Box", "An old wooden box with a rusty latch.");
@@ -42,13 +50,35 @@ void World::CreateWorld() {
     // Exits
     Exit* toGarden = new Exit("south", hall, garden);
     Exit* toHall = new Exit("north", garden, hall);
+    Exit* toBedroom = new Exit("east", hall, bedroom);
+    Exit* toHall2 = new Exit("west", bedroom, hall);
+    Exit* toCloset = new Exit("north", bedroom, closet);
+    Exit* toBedroom2 = new Exit("south", closet, bedroom);
+    Exit* toMagic = new Exit("north", closet, magical_forest);
+    Exit* toCloset2 = new Exit("south", magical_forest, closet);
+    Exit* toGreenhouse = new Exit("east", garden, greenhouse);
+    Exit* toGarden2 = new Exit("west", greenhouse, garden);
+    Exit* toWall = new Exit("west", garden, stone_wall);
+    Exit* toGarden3 = new Exit("east", stone_wall, garden);
 
     // Add contents to rooms
     hall->Add(npc);
+    magical_forest->Add(unicorn);
+    magical_forest->Add(goblin);
     hall->Add(box);
     hall->Add(toGarden);
+    hall->Add(toBedroom);
     garden->Add(brick);
     garden->Add(toHall);
+    garden->Add(toGreenhouse);
+    garden->Add(toWall);
+    bedroom->Add(toHall2);
+    bedroom->Add(toCloset);
+    closet->Add(toBedroom2);
+    closet->Add(toMagic);
+    magical_forest->Add(toCloset2);
+    greenhouse->Add(toGarden2);
+    stone_wall->Add(toGarden3);
     box->Add(small_key);
 
     // Player
@@ -57,10 +87,26 @@ void World::CreateWorld() {
     // Track all entities
     entities.push_back(hall);
     entities.push_back(garden);
+    entities.push_back(bedroom);
+    entities.push_back(closet);
+    entities.push_back(greenhouse);
+    entities.push_back(stone_wall);
+    entities.push_back(hidden_grove);
     entities.push_back(toGarden);
     entities.push_back(toHall);
+    entities.push_back(toBedroom);
+    entities.push_back(toHall2);
+    entities.push_back(toCloset);
+    entities.push_back(toBedroom2);
+    entities.push_back(toGreenhouse);
+    entities.push_back(toGarden2);
+    entities.push_back(toWall);
+    entities.push_back(toGarden3);
     entities.push_back(npc);
     entities.push_back(box);
+    entities.push_back(small_key);
     entities.push_back(brick);
+    entities.push_back(unicorn);
+    entities.push_back(goblin);
     entities.push_back(player);
 }
