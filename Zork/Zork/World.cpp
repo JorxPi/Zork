@@ -17,6 +17,8 @@ World::~World() {
 }
 
 void World::Start() {
+    std::cout << "Welcome to Zork world.\n\n";
+
     if (player && player->GetCurrentRoom()) {
         player->GetCurrentRoom()->Update();
     }
@@ -104,7 +106,6 @@ void World::CreateWorld() {
     garden->Add(toGreenhouse);
     garden->Add(toWall);
     bedroom->Add(toHall2);
-    //bedroom->Add(toCloset);
     closet->Add(toBedroom2);
     closet->Add(toMagic);
     magical_forest->Add(toCloset2);
