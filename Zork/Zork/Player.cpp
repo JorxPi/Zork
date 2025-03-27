@@ -6,6 +6,7 @@
 #include "Exit.h"
 #include "Item.h"
 #include "Utils.h"
+#include "Npc.h"
 
 Player::Player(const std::string& name, const std::string& description, Room* starting_room, World* world)
     : Creature(name, description, starting_room), world(world) {
@@ -54,14 +55,21 @@ void Player::ProcessCommand(const std::string& command) {
         std::getline(iss, target);
         Open(target);
     }
+    else if (action == "talk") {
+        std::string target;
+        iss >> std::ws;
+        std::getline(iss, target);
+        Talk(target);
+    }
+    else if (action == "inventory") {
+        ShowInventory();
+    }
     else {
         std::cout << "I don't understand that command.\n";
     }
 }
 
 void Player::Go(const std::string& direction) {
-    if (!current_room) return;
-
     for (Entity* e : current_room->GetContents()) {
         if (e->GetType() == EntityType::EXIT) {
             Exit* exit = static_cast<Exit*>(e);
@@ -138,8 +146,6 @@ void Player::Drop(const std::string& item_name) {
 }
 
 void Player::Throw(const std::string& item_name) {
-    if (!current_room) return;
-
     for (Item* item : inventory) {
         if (CompareIgnoreCase(item->GetName(), item_name)) {
             if (CompareIgnoreCase(item_name, "Brick") &&
@@ -164,8 +170,6 @@ void Player::Throw(const std::string& item_name) {
 }
 
 void Player::Open(const std::string& target) {
-    if (!current_room) return;
-
     if (CompareIgnoreCase(target, "closet") &&
         CompareIgnoreCase(current_room->GetName(), "Bedroom")) {
 
@@ -185,4 +189,46 @@ void Player::Open(const std::string& target) {
     }
 
     std::cout << "You can't open that.\n";
+}
+
+void Player::Talk(const std::string& npc_name) {
+    for (Entity* e : current_room->GetContents()) {
+        if (e->GetType() == EntityType::NPC && CompareIgnoreCase(e->GetName(), npc_name)) {
+            NPC* npc = dynamic_cast<NPC*>(e);
+            if (npc) {
+                npc->Talk();
+            }
+            else {
+                std::cout << npc_name << " doesn't seem to want to talk.\n";
+            }
+            return;
+        }
+    }
+
+    std::cout << "There's no one named \"" << npc_name << "\" here to talk to.\n";
+}
+
+void Player::ShowInventory() {
+    if (inventory.empty()) {
+        std::cout << "You are not carrying anything.\n";
+        return;
+    }
+
+    std::cout << "You are carrying:\n";
+    for (Item* item : inventory) {
+        std::cout << " - " << item->GetName();
+
+        if (!item->GetContents().empty()) {
+            std::cout << " (contains: ";
+            bool first = true;
+            for (Entity* e : item->GetContents()) {
+                if (!first) std::cout << ", ";
+                std::cout << e->GetName();
+                first = false;
+            }
+            std::cout << ")";
+        }
+
+        std::cout << "\n";
+    }
 }

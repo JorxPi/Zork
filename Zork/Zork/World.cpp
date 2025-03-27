@@ -4,6 +4,7 @@
 #include "Exit.h"
 #include "Player.h"
 #include "Creature.h"
+#include "Npc.h"
 #include <iostream>
 
 World::World() {
@@ -16,7 +17,6 @@ World::~World() {
 }
 
 void World::Start() {
-    // Show the first room just like in main()
     if (player && player->GetCurrentRoom()) {
         player->GetCurrentRoom()->Update();
     }
@@ -55,9 +55,9 @@ void World::CreateWorld() {
     hidden_grove = new Room("Hidden Grove", "A quiet, untouched grove hidden behind the fallen wall. The air feels different here.");
 
     // NPC
-    Creature* npc = new Creature("Old Man", "He looks wise and carries a walking stick.", hall);
-    Creature* unicorn = new Creature("Unicorn", "A serene white unicorn with silver eyes. It nods at you in greeting.", magical_forest);
-    Creature* goblin = new Creature("Goblin", "A mischievous green goblin crouches in the shadows, grinning with sharp teeth and clutching a satchel full of who-knows-what.", magical_forest);
+    NPC* npc = new NPC("Old Man", "He looks wise and carries a walking stick.", "Welcome, traveler. The owners of this estate vanished long ago... yet their presence lingers.", hall);
+    NPC* unicorn = new NPC("Unicorn", "A serene white unicorn with silver eyes. It nods at you in greeting.", "*Elah'thar shil'anth veilum... qiros'na melithil.*", magical_forest);
+    NPC* goblin = new NPC("Goblin", "A mischievous green goblin crouches in the shadows, grinning with sharp teeth and clutching a satchel full of who-knows-what.", "Got any shinies?", magical_forest);
 
     // Items
     Item* box = new Item("Wooden Box", "An old wooden box with a rusty latch.");
@@ -80,7 +80,6 @@ void World::CreateWorld() {
     toGrove = new Exit("west", stone_wall, hidden_grove);
     toWall2 = new Exit("east", hidden_grove, stone_wall);
 
-    // Add contents to rooms
     hall->Add(npc);
     magical_forest->Add(unicorn);
     magical_forest->Add(goblin);
@@ -100,10 +99,8 @@ void World::CreateWorld() {
     stone_wall->Add(toGarden3);
     box->Add(small_key);
 
-    // Player
     player = new Player("You", "Just an adventurer trying to explore.", hall, this);
 
-    // Track all entities
     entities.push_back(hall);
     entities.push_back(garden);
     entities.push_back(bedroom);

@@ -11,6 +11,12 @@ void Room::Update() {
     std::cout << "You are in: " << GetName() << "\n";
     std::cout << GetDescription() << "\n";
 
+    for (Entity* e : contents) {
+        if (e->GetType() == EntityType::NPC) {
+            e->Update();
+        }
+    }
+
     if (!contents.empty()) {
         std::cout << "You see:\n";
         for (Entity* e : contents) {
@@ -25,11 +31,7 @@ void Room::Update() {
                 break;
             }
 
-            case EntityType::CREATURE:
-                e->Update();
-                break;
             default:
-
                 break;
             }
         }
