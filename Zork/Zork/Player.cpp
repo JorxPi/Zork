@@ -31,6 +31,9 @@ void Player::ProcessCommand(const std::string& command) {
         iss >> direction;
         Go(direction);
     }
+    else if (action == "look") {
+        Look();
+    }
     else if (action == "take") {
         std::string item;
         iss >> std::ws;
@@ -64,6 +67,12 @@ void Player::ProcessCommand(const std::string& command) {
     else if (action == "inventory") {
         ShowInventory();
     }
+    else if (action == "attack") {
+        std::string target;
+        iss >> std::ws;
+        std::getline(iss, target);
+        Attack(target);
+    }
     else {
         std::cout << "I don't understand that command.\n";
     }
@@ -84,6 +93,10 @@ void Player::Go(const std::string& direction) {
     }
 
     std::cout << "You can't go that way.\n";
+}
+
+void Player::Look() {
+    current_room->Update();
 }
 
 void Player::Take(const std::string& item_name) {
@@ -196,7 +209,7 @@ void Player::Talk(const std::string& npc_name) {
         if (e->GetType() == EntityType::NPC && CompareIgnoreCase(e->GetName(), npc_name)) {
             NPC* npc = dynamic_cast<NPC*>(e);
             if (npc) {
-                npc->Talk();
+                npc->Talk(this);
             }
             else {
                 std::cout << npc_name << " doesn't seem to want to talk.\n";
@@ -230,5 +243,53 @@ void Player::ShowInventory() {
         }
 
         std::cout << "\n";
+    }
+}
+
+void Player::Attack(const std::string& target) {
+    Item* weapon = nullptr;
+    for (Item* item : inventory) {
+        if (CompareIgnoreCase(item->GetName(), "Rusty Sword")) {
+            weapon = item;
+            break;
+        }
+    }
+
+    if (!weapon) {
+        std::cout << "You have nothing to fight with!\n";
+        return;
+    }
+
+    for (Entity* e : current_room->GetContents()) {
+        if (CompareIgnoreCase(e->GetName(), target) && e->GetType() == EntityType::NPC) {
+            NPC* creature = dynamic_cast<NPC*>(e);
+            if (creature && CompareIgnoreCase(creature->GetName(), "Hollow Beast")) {
+
+                world->HollowBeastDefeated(current_room);
+
+                return;
+            }
+        }
+    }
+
+    std::cout << "There's nothing to attack here.\n";
+}
+
+bool Player::HasItem(const std::string& item_name) const {
+    for (Item* item : inventory) {
+        if (CompareIgnoreCase(item->GetName(), item_name)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void Player::RemoveItem(const std::string& item_name) {
+    for (auto it = inventory.begin(); it != inventory.end(); ++it) {
+        if (CompareIgnoreCase((*it)->GetName(), item_name)) {
+            delete* it;
+            inventory.erase(it);
+            return;
+        }
     }
 }

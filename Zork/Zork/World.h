@@ -8,6 +8,10 @@ class Room;
 
 class Exit;
 
+class NPC;
+
+class Item;
+
 class World {
 public:
     World();
@@ -16,6 +20,7 @@ public:
     void Start();
     void UnlockHiddenGrove();
     void UnlockCloset();
+    void HollowBeastDefeated(Room* room);
 
 private:
     std::list<Entity*> entities;
@@ -29,6 +34,9 @@ private:
     Room* bedroom = nullptr;
     Room* closet = nullptr;
     Exit* toCloset = nullptr;
+
+    NPC* hollow_beast = nullptr;
+    Item* medallion = nullptr;
 
     void CreateWorld();
 };

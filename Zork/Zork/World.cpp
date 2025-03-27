@@ -43,6 +43,14 @@ void World::UnlockCloset() {
     std::cout << "You unlocked the closet. You can now go north.\n";
 }
 
+void World::HollowBeastDefeated(Room* room) {
+    room->Add(medallion);
+    room->Remove(hollow_beast);
+    std::cout << "You strike the Hollow Beast down with the rusty sword! It lets out a screech and collapses.\n";
+    std::cout << "Something shiny drops to the ground...\n";
+}
+
+
 void World::CreateWorld() {
     // Rooms
     Room* hall = new Room("Hall", "A large, echoing stone hall with torches on the walls.");
@@ -55,14 +63,19 @@ void World::CreateWorld() {
     hidden_grove = new Room("Hidden Grove", "A quiet, untouched grove hidden behind the fallen wall. The air feels different here.");
 
     // NPC
-    NPC* npc = new NPC("Old Man", "He looks wise and carries a walking stick.", "Welcome, traveler. The owners of this estate vanished long ago... yet their presence lingers.", hall);
+    NPC* old_man = new NPC("Old Man", "He looks wise and carries a walking stick.", "Welcome, traveler. The owners of this estate vanished long ago... One of them left behind a medallion that meant a great deal. I fear it may be lost forever.", hall);
     NPC* unicorn = new NPC("Unicorn", "A serene white unicorn with silver eyes. It nods at you in greeting.", "*Elah'thar shil'anth veilum... qiros'na melithil.*", magical_forest);
     NPC* goblin = new NPC("Goblin", "A mischievous green goblin crouches in the shadows, grinning with sharp teeth and clutching a satchel full of who-knows-what.", "Got any shinies?", magical_forest);
+    hollow_beast = new NPC("Hollow Beast","A twisted creature made of bark and shadow. It clutches something silver in its claws.","The beast growls menacingly. It’s not here to chat.",hidden_grove);
 
     // Items
     Item* box = new Item("Wooden Box", "An old wooden box with a rusty latch.");
     Item* brick = new Item("Brick", "A solid, weathered brick. It's probably not very useful, but you never know.");
     Item* small_key = new Item("Small Key", "A tiny key with delicate engravings. It looks like it could open something important.");
+    medallion = new Item("Old Medallion", "An ancient silver medallion with a family crest engraved on it.");
+    Item* sword = new Item("Rusty Sword", "Old, heavy, and still sharp enough to cut through trouble.");
+
+    old_man->SetAlternateDialogueTrigger("Old Medallion", "You found it! My family's medallion... Thank you, traveler.");
 
     // Exits
     Exit* toGarden = new Exit("south", hall, garden);
@@ -80,7 +93,7 @@ void World::CreateWorld() {
     toGrove = new Exit("west", stone_wall, hidden_grove);
     toWall2 = new Exit("east", hidden_grove, stone_wall);
 
-    hall->Add(npc);
+    hall->Add(old_man);
     magical_forest->Add(unicorn);
     magical_forest->Add(goblin);
     hall->Add(box);
@@ -98,6 +111,8 @@ void World::CreateWorld() {
     greenhouse->Add(toGarden2);
     stone_wall->Add(toGarden3);
     box->Add(small_key);
+    greenhouse->Add(sword);
+    hidden_grove->Add(hollow_beast);
 
     player = new Player("You", "Just an adventurer trying to explore.", hall, this);
 
@@ -120,7 +135,7 @@ void World::CreateWorld() {
     entities.push_back(toGrove);
     entities.push_back(toWall2);
     entities.push_back(toGarden3);
-    entities.push_back(npc);
+    entities.push_back(old_man);
     entities.push_back(box);
     entities.push_back(small_key);
     entities.push_back(brick);
